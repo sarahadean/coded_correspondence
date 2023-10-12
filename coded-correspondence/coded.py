@@ -2,6 +2,7 @@
 secret_message = "xuo jxuhu! jxyi yi qd unqcfbu ev q squiqh syfxuh. muhu oek qrbu je tusetu yj? y xefu ie! iudt cu q cuiiqwu rqsa myjx jxu iqcu evviuj!"
 new_message = "hey there! this is an example of a caesar cipher. were you able to decode it? i hope so! send me a message back with the same offset!"
 offset = 10
+#value:letter
 cipher = {}
 alpha = "abcdefghijklmnopqrstuvwxyz"
 letter_list = list(cipher.values())
@@ -76,29 +77,64 @@ m = "txm srom vkda gl lzlgzr qpdb? fepb ejac! ubr imn tapludwy mhfbz cza ruxzal 
 key = "friends"
 
 def decode_vigenere(secret_message, keyword):
-    createCipher(alpha)
     decodedMessage = ""
 
     #create keyword phrase
-def create_keyword_phrase(keyword, secret_message):
     keyword_phrase = ""
-    k = 0
+    k_index = 0
     
-    for i in secret_message:
-        if k > len(keyword):
-            k = 0
+    for char in secret_message:
+        if k_index >= len(keyword):
+            k_index = 0
+        if char in alpha:
+            keyword_phrase += keyword[k_index]
+            k_index += 1
         else:
-            if secret_message[i] not in letter_list:
-                keyword_phrase[i] = secret_message[i]
-            keyword_phrase = keyword_phrase + keyword[i]
-            i += 1
+            keyword_phrase += char
         
-    print(keyword_phrase)
-    return keyword_phrase
-            
-create_keyword_phrase("cat", "ciphers are awesome!")
+    for i in range(len(secret_message)):
+        if secret_message[i] not in alpha:
+            decodedMessage += secret_message[i]
+        else:
+            value_index = alpha.find(secret_message[i])
+            offset_index = alpha.find(keyword_phrase[i])
+            new_char = alpha[(value_index + offset_index) % 26]
+            decodedMessage += new_char
+
+    print(decodedMessage)
+    return decodedMessage
+
+decode_vigenere("aiwfeyq ayc adcsvke!", "cat")
 
  
+def encode_vigenere(secret_message, keyword):
+    encodedMessage = ""
 
+    #create keyword phrase
+    keyword_phrase = ""
+    k_index = 0
+    
+    for char in secret_message:
+        if k_index >= len(keyword):
+            k_index = 0
+        if char in alpha:
+            keyword_phrase += keyword[k_index]
+            k_index += 1
+        else:
+            keyword_phrase += char
+        
+    for i in range(len(secret_message)):
+        if secret_message[i] not in alpha:
+            encodedMessage += secret_message[i]
+        else:
+            value_index = alpha.find(secret_message[i])
+            offset_index = alpha.find(keyword_phrase[i])
+            new_char = alpha[(value_index - offset_index) % 26]
+            encodedMessage += new_char
+
+    print(encodedMessage)
+    return encodedMessage
+
+encode_vigenere("ciphers are awesome!", "cat")
 
 
